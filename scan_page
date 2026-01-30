@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Multi-Scan - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .laser {
+            height: 6px; background: #ff0000; box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.6);
+            position: absolute; width: 100%; z-index: 20; animation: scanLine 2s infinite linear;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .scan-bubble {
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background-color: #7d96a8;
+            border: 4px solid #1a1a1a;
+        }
+        .scan-bubble.complete {
+            background-color: #93c47d;
+            border-color: #1a1a1a;
+        }
+
+        .spark {
+            position: absolute; width: 100px; height: 100px;
+            border: 4px dotted #F3D37D; border-radius: 50%;
+            animation: sparks 0.6s ease-out forwards;
+        }
+
+        @keyframes sparks {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-between items-start mb-4">
+        <button onclick="toggleModal('instructionsModal', true)" class="w-14 h-14 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_black] flex items-center justify-center bubbly-button">
+            <i data-lucide="file-text" class="w-8 h-8 text-slate-400"></i>
+        </button>
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <div id="hero-area" class="w-full max-w-md relative mb-4">
+        <div id="viewfinder" class="relative w-full aspect-square border-[8px] border-black rounded-[3rem] overflow-hidden bg-zinc-900 shadow-2xl flex items-center justify-center p-8">
+            <img id="viewfinder-img" src="idle-1.png" class="max-w-full max-h-full object-contain transition-opacity duration-300">
+            <div id="laser-bar" class="laser hidden"></div>
+            
+            <div class="absolute inset-0 border-[20px] border-zinc-900 pointer-events-none"></div>
+            <div class="absolute top-10 left-10 w-12 h-12 border-t-8 border-l-8 border-white rounded-tl-lg"></div>
+            <div class="absolute top-10 right-10 w-12 h-12 border-t-8 border-r-8 border-white rounded-tr-lg"></div>
+            <div class="absolute bottom-10 left-10 w-12 h-12 border-b-8 border-l-8 border-white rounded-bl-lg"></div>
+            <div class="absolute bottom-10 right-10 w-12 h-12 border-b-8 border-r-8 border-white rounded-br-lg"></div>
+        </div>
+    </div>
+
+    <p id="main-instruction" class="font-black text-xl uppercase italic tracking-tighter mb-6">Scan All 3 Barcodes to Continue</p>
+
+    <div class="w-full max-w-md space-y-4">
+        <div id="bubble-elabel" class="scan-bubble w-full h-28 rounded-[2rem] flex items-center px-6 gap-6 shadow-[4px_4px_0px_black]">
+            <img src="product-elabel.png" class="h-20 w-auto rounded-lg">
+            <div id="content-elabel" class="flex-grow">
+                <span class="font-black text-2xl uppercase italic text-black/40">E-Label</span>
+            </div>
+        </div>
+
+        <div id="bubble-camera" class="scan-bubble w-full h-28 rounded-[2rem] flex items-center px-6 gap-6 shadow-[4px_4px_0px_black]">
+            <img src="icon-camera-flat.png" class="h-16 w-auto"> <div id="content-camera" class="flex-grow">
+                <span class="font-black text-2xl uppercase italic text-black/40">Camera</span>
+            </div>
+        </div>
+
+        <div id="bubble-rail" class="scan-bubble w-full h-28 rounded-[2rem] flex items-center px-6 gap-6 shadow-[4px_4px_0px_black]">
+            <img src="product-rail.png" class="h-20 w-auto rounded-lg">
+            <div id="content-rail" class="flex-grow">
+                <span class="font-black text-2xl uppercase italic text-black/40">Rail ID</span>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="location.reload()" class="mt-8 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-black transition-colors">
+        Oops I mis-scanned. Let me start over.
+    </button>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_black] overflow-hidden flex flex-col">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal('instructionsModal', false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_black]"><i data-lucide="x" class="w-8 h-8"></i></button>
+            </div>
+            <div class="p-4"><img src="assembly-guide.png" class="w-full h-auto rounded-xl"></div>
+            <div class="p-6"><button onclick="toggleModal('instructionsModal', false)" class="w-full bg-black text-white font-black py-4 rounded-xl uppercase">Close</button></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        const scanData = {
+            elabel: { code: "YZ08-3Z5F", img: "scan-elabel.png" },
+            rail: { code: "4Z1-9S8TW", img: "scan-rail.png" },
+            camera: { code: "tc31d_00000716", img: "scan-camera.png" }
+        };
+
+        const sequence = [
+            { type: 'idle', img: 'idle-1.png' },
+            { type: 'scan', target: 'elabel', img: 'scan-elabel.png' },
+            { type: 'idle', img: 'idle-2.png' },
+            { type: 'scan', target: 'rail', img: 'scan-rail.png' },
+            { type: 'idle', img: 'idle-3.png' },
+            { type: 'scan', target: 'camera', img: 'scan-camera.png' },
+            { type: 'finish' }
+        ];
+
+        let currentStep = 0;
+
+        function runDemo() {
+            if (currentStep >= sequence.length) return;
+            
+            const step = sequence[currentStep];
+            const img = document.getElementById('viewfinder-img');
+            const laser = document.getElementById('laser-bar');
+
+            if (step.type === 'finish') {
+                triggerFinalDopamine();
+                return;
+            }
+
+            img.src = step.img;
+            
+            // Randomize timing: 1500ms to 3500ms
+            const randomTime = Math.floor(Math.random() * (3500 - 1500 + 1)) + 1500;
+
+            if (step.type === 'scan') {
+                laser.classList.remove('hidden');
+                setTimeout(() => {
+                    laser.classList.add('hidden');
+                    completeBubble(step.target);
+                    currentStep++;
+                    runDemo();
+                }, randomTime);
+            } else {
+                laser.classList.add('hidden');
+                setTimeout(() => {
+                    currentStep++;
+                    runDemo();
+                }, randomTime);
+            }
+        }
+
+        function completeBubble(target) {
+            const bubble = document.getElementById(`bubble-${target}`);
+            const content = document.getElementById(`content-${target}`);
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+            bubble.appendChild(spark);
+            setTimeout(() => spark.remove(), 600);
+
+            bubble.classList.add('complete');
+            content.innerHTML = `
+                <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-[2px_2px_0px_black]">
+                    <span class="font-mono font-black text-xl tracking-tighter">${scanData[target].code}</span>
+                </div>
+            `;
+        }
+
+        function triggerFinalDopamine() {
+            const hero = document.getElementById('hero-area');
+            document.getElementById('main-instruction').innerText = "Scanning Complete!";
+            hero.innerHTML = `
+                <a href="plug_in_battery.html" class="block w-full aspect-square border-[8px] border-[#84cc16] rounded-[3rem] bg-white shadow-[0_20px_50px_rgba(132,204,22,0.3)] flex flex-col items-center justify-center p-8 bubbly-button">
+                    <div class="text-[#84cc16] animate-bounce mb-4"><i data-lucide="check-circle-2" class="w-32 h-32"></i></div>
+                    <h2 class="font-black text-4xl uppercase italic text-black leading-none text-center">Complete</h2>
+                    <div class="mt-6 flex items-center gap-2 bg-black text-[#F3D37D] px-10 py-4 rounded-2xl font-black text-2xl shadow-[4px_4px_0px_#84cc16]">NEXT <i data-lucide="chevron-right"></i></div>
+                </a>
+            `;
+            lucide.createIcons();
+        }
+
+        function toggleModal(id, show) { document.getElementById(id).classList.toggle('hidden', !show); }
+        window.onload = runDemo;
+    </script>
+</body>
+</html>
