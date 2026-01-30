@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Scan - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        /* Laser Animation */
+        @keyframes scanLine {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .laser {
+            height: 6px;
+            background: #ff0000;
+            box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.6);
+            position: absolute;
+            width: 100%;
+            z-index: 20;
+            animation: scanLine 2s infinite linear;
+        }
+
+        .scan-bar {
+            background: white;
+            border: 6px solid #F3D37D;
+            border-radius: 1.25rem;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-between items-start mb-4">
+        <button onclick="toggleModal('instructionsModal', true)" class="w-14 h-14 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_black] flex items-center justify-center bubbly-button">
+            <i data-lucide="file-text" class="w-8 h-8 text-slate-400"></i>
+        </button>
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-24 h-24 mb-6">
+
+    <div class="w-full max-w-md space-y-8 flex flex-col items-center">
+        
+        <div class="w-full flex flex-col items-center">
+            <img src="product-elabel.png" class="w-48 h-auto mb-2">
+            <button onclick="startScan('elabel')" id="row-elabel" class="scan-bar w-full py-4 px-6 flex items-center justify-between bubbly-button">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="barcode" class="w-8 h-8"></i>
+                    <span id="text-elabel" class="font-bold text-lg text-slate-700">Scan E-Label ID</span>
+                </div>
+                <i data-lucide="circle-x" id="icon-elabel" class="w-6 h-6 text-slate-300"></i>
+            </button>
+        </div>
+
+        <div class="w-full flex flex-col items-center">
+            <img src="product-camera.png" class="w-56 h-auto mb-2">
+            <button onclick="startScan('camera')" id="row-camera" class="scan-bar w-full py-4 px-6 flex items-center justify-between bubbly-button">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="barcode" class="w-8 h-8"></i>
+                    <span id="text-camera" class="font-bold text-lg text-slate-700">Scan Camera ID</span>
+                </div>
+                <i data-lucide="circle-x" id="icon-camera" class="w-6 h-6 text-slate-300"></i>
+            </button>
+        </div>
+
+        <div class="w-full flex flex-col items-center">
+            <img src="product-rail.png" class="w-48 h-auto mb-2">
+            <button onclick="startScan('rail')" id="row-rail" class="scan-bar w-full py-4 px-6 flex items-center justify-between bubbly-button">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="barcode" class="w-8 h-8"></i>
+                    <span id="text-rail" class="font-bold text-lg text-slate-700">Scan Rail ID</span>
+                </div>
+                <i data-lucide="circle-x" id="icon-rail" class="w-6 h-6 text-slate-300"></i>
+            </button>
+        </div>
+
+        <a href="plug_in_battery.html" id="next-btn" class="mt-4 w-full bg-[#F3D37D] border-2 border-black text-black font-black text-2xl py-5 rounded-[2.5rem] flex items-center justify-center gap-2 shadow-[0px_6px_0px_#e5bc4d] opacity-40 pointer-events-none transition-all bubbly-button uppercase italic">
+            Next <i data-lucide="chevron-right"></i>
+        </a>
+    </div>
+
+    <div id="scannerOverlay" class="hidden fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-8">
+        <div class="relative w-full aspect-square border-8 border-[#F3D37D] rounded-[3rem] overflow-hidden bg-zinc-900 shadow-[0_0_50px_rgba(243,211,125,0.3)]">
+            <img id="scan-viewfinder-img" src="" class="w-full h-full object-contain p-8">
+            <div class="laser"></div>
+            
+            <div class="absolute top-10 left-10 w-12 h-12 border-t-8 border-l-8 border-white rounded-tl-lg"></div>
+            <div class="absolute top-10 right-10 w-12 h-12 border-t-8 border-r-8 border-white rounded-tr-lg"></div>
+            <div class="absolute bottom-10 left-10 w-12 h-12 border-b-8 border-l-8 border-white rounded-bl-lg"></div>
+            <div class="absolute bottom-10 right-10 w-12 h-12 border-b-8 border-r-8 border-white rounded-br-lg"></div>
+        </div>
+        <p class="mt-10 text-[#F3D37D] font-black text-2xl uppercase tracking-[0.2em] animate-pulse italic">Scanning Asset...</p>
+    </div>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_black] overflow-hidden flex flex-col">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal('instructionsModal', false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_black]"><i data-lucide="x" class="w-8 h-8"></i></button>
+            </div>
+            <div class="p-4"><img src="assembly-guide.png" class="w-full h-auto rounded-xl"></div>
+            <div class="p-6"><button onclick="toggleModal('instructionsModal', false)" class="w-full bg-black text-white font-black py-4 rounded-xl uppercase">Close</button></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        const scanConfig = { 
+            elabel: { id: "YZ08-3Z5F", img: "scan-elabel.png" }, 
+            camera: { id: "tc31d_00000716", img: "scan-camera.png" }, 
+            rail: { id: "4Z1-9S8TW", img: "scan-rail.png" } 
+        };
+
+        let completed = { elabel: false, camera: false, rail: false };
+
+        function startScan(type) {
+            const overlay = document.getElementById('scannerOverlay');
+            const viewfinder = document.getElementById('scan-viewfinder-img');
+            
+            // 1. Set the image to the specific file you uploaded
+            viewfinder.src = scanConfig[type].img;
+            overlay.classList.remove('hidden');
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                
+                // 2. Update the UI with the data
+                document.getElementById(`text-${type}`).innerText = scanConfig[type].id;
+                document.getElementById(`text-${type}`).classList.replace('text-slate-700', 'text-black');
+                document.getElementById(`text-${type}`).classList.add('font-mono', 'tracking-wider');
+                document.getElementById(`icon-${type}`).innerHTML = '<i data-lucide="check-circle-2" class="text-green-500 w-8 h-8"></i>';
+                
+                completed[type] = true;
+                lucide.createIcons();
+                checkState();
+            }, 2000);
+        }
+
+        function checkState() {
+            if (completed.elabel && completed.camera && completed.rail) {
+                const btn = document.getElementById('next-btn');
+                btn.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        }
+
+        function toggleModal(id, show) {
+            document.getElementById(id).classList.toggle('hidden', !show);
+        }
+    </script>
+</body>
+</html>

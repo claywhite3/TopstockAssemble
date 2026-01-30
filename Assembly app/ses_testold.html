@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SES E-Label Test - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .timer-ring {
+            transition: stroke-dashoffset 1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-between items-start mb-4">
+        <button onclick="toggleModal('instructionsModal', true)" class="w-14 h-14 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_black] flex items-center justify-center bubbly-button">
+            <i data-lucide="file-text" class="w-8 h-8 text-slate-400"></i>
+        </button>
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-20 h-20 mb-6">
+
+    <div class="w-full max-w-md flex-grow flex flex-col items-center space-y-8">
+        <div class="text-center">
+            <h1 class="text-3xl font-black italic uppercase leading-none text-slate-900">Functional Testing<br>E-Label (SES)</h1>
+        </div>
+
+        <div class="w-full px-4">
+            <img src="ses-test-graphic.png" alt="SES E-Label Graphic" class="w-full h-auto rounded-2xl shadow-lg border-2 border-white/50">
+        </div>
+
+        <div class="text-center px-8">
+            <p class="text-lg font-bold text-slate-800 leading-tight">Checking wireless communication and display update capability.</p>
+        </div>
+
+        <button onclick="toggleModal('ledQuestionModal', true)" class="w-64 aspect-square bg-gradient-to-br from-[#F3D37D] to-[#e5bc4d] border-4 border-black rounded-[3rem] shadow-[0px_10px_0px_#1a1a1a] flex flex-col items-center justify-center bubbly-button">
+            <i data-lucide="refresh-cw" class="w-24 h-24 text-white stroke-[1.5]"></i>
+            <span class="mt-4 font-black text-2xl uppercase tracking-tighter text-black">Test E-Label</span>
+        </button>
+    </div>
+
+    <div class="w-full max-w-md flex justify-start mt-8 mb-4">
+        <a href="led_test.html" class="bg-[#F3D37D] border-2 border-black text-black font-black text-xl py-4 px-10 rounded-[2rem] flex items-center justify-center gap-2 shadow-[0px_6px_0px_#e5bc4d] bubbly-button uppercase italic">
+            <i data-lucide="chevron-left"></i> Back
+        </a>
+    </div>
+
+    <div id="ledQuestionModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] border-4 border-black shadow-[10px_10px_0px_black] p-8 text-center">
+            <h3 class="font-black text-2xl uppercase italic mb-6">Verify Action</h3>
+            <p class="font-bold text-slate-700 text-lg mb-8">Did the LED flash?</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="toggleModal('ledQuestionModal', false); toggleModal('rangeFailureModal', true)" class="bg-white border-4 border-black text-black font-black py-4 rounded-2xl bubbly-button uppercase shadow-[4px_4px_0px_#ef4444]">No</button>
+                <button onclick="toggleModal('ledQuestionModal', false); toggleModal('imageQuestionModal', true)" class="bg-black text-white font-black py-4 rounded-2xl bubbly-button uppercase shadow-[4px_4px_0px_#84cc16]">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rangeFailureModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] border-4 border-black shadow-[10px_10px_0px_black] p-8 text-center">
+            <i data-lucide="wifi-off" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+            <p class="font-bold text-slate-700 leading-tight mb-8">Please confirm that rail is within range of AP and retry.</p>
+            <button onclick="toggleModal('rangeFailureModal', false); toggleModal('ledQuestionModal', true)" class="w-full bg-black text-white font-black text-xl py-5 rounded-2xl bubbly-button uppercase shadow-[4px_4px_0px_#F3D37D]">Retry</button>
+        </div>
+    </div>
+
+    <div id="imageQuestionModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] border-4 border-black shadow-[10px_10px_0px_black] p-8 text-center">
+            <h3 class="font-black text-2xl uppercase italic mb-6">Verify Display</h3>
+            <p class="font-bold text-slate-700 text-lg mb-8">Did the image on the E-label change?</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="toggleModal('imageQuestionModal', false); startCountdown()" class="bg-white border-4 border-black text-black font-black py-4 rounded-2xl bubbly-button uppercase shadow-[4px_4px_0px_#ef4444]">No</button>
+                <button onclick="location.href='camera_test.html'" class="bg-black text-white font-black py-4 rounded-2xl bubbly-button uppercase shadow-[4px_4px_0px_#84cc16]">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="timerModal" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] border-4 border-black shadow-[10px_10px_0px_black] p-10 text-center">
+            <h3 class="font-black text-2xl uppercase italic mb-2">Please Retry</h3>
+            <p class="text-slate-500 font-bold mb-8">Communicating with Cloud...</p>
+            <div class="relative w-32 h-32 mx-auto mb-4">
+                <svg class="w-full h-full" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="#f1f5f9" stroke-width="8" fill="none" />
+                    <circle id="countdown-circle" cx="50" cy="50" r="45" stroke="#F3D37D" stroke-width="8" fill="none" stroke-dasharray="283" stroke-dashoffset="0" class="timer-ring" />
+                </svg>
+                <div id="timer-text" class="absolute inset-0 flex items-center justify-center font-black text-3xl">30</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_black] overflow-hidden flex flex-col">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal('instructionsModal', false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_black]"><i data-lucide="x" class="w-8 h-8"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh]"><img src="assembly-guide.png" class="w-full h-auto rounded-xl"></div>
+            <div class="p-6"><button onclick="toggleModal('instructionsModal', false)" class="w-full bg-black text-white font-black py-4 rounded-xl uppercase">Close</button></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function toggleModal(id, show) {
+            const m = document.getElementById(id);
+            m.classList.toggle('hidden', !show);
+            m.classList.toggle('flex', show);
+        }
+
+        function startCountdown() {
+            toggleModal('timerModal', true);
+            let timeLeft = 30;
+            const timerText = document.getElementById('timer-text');
+            const circle = document.getElementById('countdown-circle');
+            const totalDash = 283;
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerText.innerText = timeLeft;
+                circle.style.strokeDashoffset = totalDash - (totalDash * (timeLeft / 30));
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    toggleModal('timerModal', false);
+                    toggleModal('imageQuestionModal', true);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

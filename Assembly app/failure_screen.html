@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectivity Failure - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .fail-ring {
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+            animation: pulse-red 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(239, 68, 68, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 0 50px rgba(239, 68, 68, 0.5); }
+        }
+
+        .action-card {
+            background: #F3D37D;
+            border: 4px solid #1a1a1a;
+            box-shadow: 0 8px 0 #1a1a1a;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-between items-start mb-4">
+        <button onclick="toggleModal('instructionsModal', true)" class="w-14 h-14 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_black] flex items-center justify-center bubbly-button">
+            <i data-lucide="file-text" class="w-8 h-8 text-slate-400"></i>
+        </button>
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-20 h-20 mb-4">
+
+    <div class="w-full max-w-md flex-grow flex flex-col items-center space-y-6 text-center">
+        
+        <div class="px-6">
+            <h1 class="text-2xl font-black italic uppercase leading-tight text-slate-900">
+                We have failed to recognize your rail's online connectivity
+            </h1>
+        </div>
+
+        <div class="relative w-64 h-64 flex items-center justify-center fail-ring rounded-full bg-white border-[12px] border-[#ef4444]">
+            <div class="flex flex-col items-center text-[#ef4444]">
+                <i data-lucide="x" class="w-32 h-32 stroke-[3]"></i>
+                <h2 class="font-black text-3xl uppercase italic leading-none">Failure</h2>
+            </div>
+        </div>
+
+        <div class="px-8">
+            <p class="text-xl font-bold text-slate-700 leading-tight">
+                Its okay - we will walk you through troubleshooting
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 w-full px-2 mt-4">
+            
+            <a href="checking_connection.html" class="action-card rounded-[2.5rem] p-6 flex flex-col items-center justify-between min-h-[280px] bubbly-button">
+                <i data-lucide="rotate-ccw" class="w-20 h-20 text-white stroke-[2.5] mb-4"></i>
+                <span class="font-black text-lg uppercase tracking-tight text-white leading-tight">
+                    I realize what was wrong.<br>Let's Retry Now!
+                </span>
+            </a>
+
+            <a href="check_battery.html" class="action-card rounded-[2.5rem] p-6 flex flex-col items-center justify-between min-h-[280px] bubbly-button">
+                <i data-lucide="wrench" class="w-20 h-20 text-white stroke-[2.5] mb-4"></i>
+                <span class="font-black text-lg uppercase tracking-tight text-white leading-tight">
+                    Let's fix it!
+                </span>
+            </a>
+
+        </div>
+    </div>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_black] overflow-hidden flex flex-col">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal('instructionsModal', false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_black]"><i data-lucide="x" class="w-8 h-8"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh]"><img src="assembly-guide.png" class="w-full h-auto rounded-xl"></div>
+            <div class="p-6"><button onclick="toggleModal('instructionsModal', false)" class="w-full bg-black text-white font-black py-4 rounded-xl uppercase">Close</button></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function toggleModal(id, show) {
+            const m = document.getElementById(id);
+            m.classList.toggle('hidden', !show);
+            m.classList.toggle('flex', show);
+        }
+    </script>
+</body>
+</html>

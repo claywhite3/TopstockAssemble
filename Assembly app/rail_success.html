@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Passed - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .success-bounce {
+            animation: bounce-subtle 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .glow-green {
+            box-shadow: 0 0 25px rgba(132, 204, 22, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-end items-start mb-6">
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-24 h-24 mb-8">
+
+    <div class="w-full max-w-md flex-grow flex flex-col items-center space-y-8">
+        
+        <div class="relative w-56 h-56 flex items-center justify-center success-bounce">
+            <div class="absolute inset-0 bg-[#84cc16] rounded-full glow-green border-4 border-black"></div>
+            <div class="relative flex flex-col items-center text-white">
+                <i data-lucide="check" class="w-24 h-24 stroke-[4]"></i>
+                <span class="font-black text-4xl uppercase italic leading-none">Pass</span>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h1 class="text-3xl font-black italic uppercase leading-tight text-slate-900">
+                Rail Testing Successful
+            </h1>
+        </div>
+
+        <div class="w-full px-4">
+            <img src="battery-unplug-guide.png" alt="Unplug Battery Instruction" class="w-full h-auto rounded-3xl border-4 border-white shadow-xl">
+        </div>
+
+        <div class="text-center px-6">
+            <p class="text-xl font-bold text-slate-800 leading-snug">
+                Please <span class="text-red-600 underline">unplug the battery</span> now.<br>
+                Pack the rail carefully for shipping.
+            </p>
+        </div>
+    </div>
+
+    <div class="w-full max-w-md mt-10 mb-6">
+        <a href="scan_page.html" class="w-full bg-[#F3D37D] border-4 border-black text-black font-black text-3xl py-6 rounded-[2.5rem] flex items-center justify-center gap-4 shadow-[0px_8px_0px_black] bubbly-button uppercase italic tracking-tighter">
+            Next Rail <i data-lucide="play" class="w-8 h-8 fill-black"></i>
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
