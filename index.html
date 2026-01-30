@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topstock Rail Assembly Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .bubbly-button {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bubbly-button:active {
+            transform: scale(0.90);
+        }
+        /* High contrast button styling */
+        .btn-container {
+            background: #F3D37D;
+            border: 4px solid #1a1a1a; /* High contrast border */
+            box-shadow: 0 10px 0 #1a1a1a; /* 3D effect */
+        }
+        .btn-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 0 #1a1a1a;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen flex items-center justify-center p-4 font-sans text-slate-900">
+
+    <div class="w-full max-w-md relative min-h-[850px] flex flex-col items-center p-8">
+        
+        <div class="w-full flex justify-end mb-4">
+            <div class="bg-white px-4 py-1 rounded-lg border-2 border-black text-xs font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                assembler02@fih.com
+            </div>
+        </div>
+
+        <div class="mt-8 mb-6 animate-[float_4s_infinite_ease-in-out]">
+            <img src="app-logo.png" alt="Logo" class="w-28 h-28 rounded-2xl border-4 border-black shadow-[6px_6px_0px_rgba(0,0,0,1)]">
+        </div>
+
+        <div class="text-center mb-16">
+            <h2 class="text-xl font-bold tracking-tight text-slate-800 uppercase italic">Welcome</h2>
+            <h1 class="text-5xl font-black tracking-tight mt-2 text-black leading-none">Topstock Rail</h1>
+            <h2 class="text-4xl font-extrabold text-slate-900 mt-2">Assembly Tool</h2>
+        </div>
+
+        <div class="flex flex-col gap-10 w-full px-4">
+            
+            <button onclick="toggleModal(true)" class="bubbly-button group">
+                <div class="btn-container w-full py-8 rounded-[2.5rem] flex flex-col items-center justify-center transition-all">
+                    <i data-lucide="file-text" class="w-20 h-20 text-black stroke-[2] mb-2"></i>
+                    <span class="font-black text-2xl uppercase tracking-tight text-black">Assembly Instructions</span>
+                </div>
+            </button>
+
+            <a href="scan_page.html" class="bubbly-button group">
+                <div class="btn-container w-full py-8 rounded-[2.5rem] flex flex-col items-center justify-center transition-all">
+                    <i data-lucide="scan-line" class="w-20 h-20 text-black stroke-[2] mb-2"></i>
+                    <span class="font-black text-2xl uppercase tracking-tight text-black">Ready to Scan</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal(false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-4 flex-grow">
+                <img src="assembly-guide.png" alt="Guide" class="w-full h-auto rounded-xl">
+            </div>
+            <div class="p-6">
+                <button onclick="toggleModal(false)" class="w-full bg-black text-white font-black text-xl py-5 rounded-2xl bubbly-button uppercase tracking-widest shadow-[4px_4px_0px_rgba(243,211,125,1)]">
+                    Close Guide
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function toggleModal(show) {
+            const modal = document.getElementById('instructionsModal');
+            if (show) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+            else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+    </script>
+</body>
+</html>

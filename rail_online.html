@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Online - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .success-glow {
+            filter: drop-shadow(0 0 15px rgba(132, 204, 22, 0.4));
+            animation: glow-pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(132, 204, 22, 0.4)); }
+            50% { filter: drop-shadow(0 0 25px rgba(132, 204, 22, 0.7)); }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-end items-start mb-8">
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-24 h-24 mb-12">
+
+    <div class="w-full max-w-md flex-grow flex flex-col items-center justify-center space-y-12 fade-in-up">
+        
+        <div class="relative w-72 h-72 flex items-center justify-center">
+            <div class="absolute inset-0 border-[12px] border-[#84cc16] rounded-full success-glow opacity-80"></div>
+            <div class="absolute inset-0 border-[4px] border-white/50 rounded-full scale-95"></div>
+            
+            <div class="flex flex-col items-center">
+                <i data-lucide="wifi" class="w-24 h-24 text-slate-600 mb-2"></i>
+                <p class="text-sm font-black uppercase text-[#4d7c0f] tracking-tighter">
+                    Success Online
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center px-8 space-y-4">
+            <h1 class="text-3xl font-black text-slate-900 leading-tight">
+                Rail is Registered<br>and Online
+            </h1>
+            <p class="text-xl font-bold text-slate-500 italic">
+                Please continue ...
+            </p>
+        </div>
+    </div>
+
+    <div class="w-full max-w-md flex justify-end mt-8 mb-4">
+        <a href="led_test.html" class="bg-[#F3D37D] border-2 border-black text-black font-black text-2xl py-5 px-12 rounded-[2.5rem] flex items-center justify-center gap-3 shadow-[0px_6px_0px_#e5bc4d] bubbly-button uppercase italic">
+            Next <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

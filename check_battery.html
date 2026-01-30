@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshoot Battery - Topstock Rail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .bubbly-button { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubbly-button:active { transform: scale(0.95); }
+        
+        .pulse-soft {
+            animation: pulse-border 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0,0,0,1); }
+            50% { border-color: rgba(243, 211, 125, 1); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#F3D37D] via-[#F3D37D] to-white min-h-screen font-sans text-black p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-md flex justify-between items-start mb-4">
+        <button onclick="toggleModal('instructionsModal', true)" class="w-14 h-14 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_black] flex items-center justify-center bubbly-button">
+            <i data-lucide="file-text" class="w-8 h-8 text-slate-400"></i>
+        </button>
+        <div class="bg-white border-2 border-black px-3 py-1 rounded-lg text-[10px] font-bold shadow-[2px_2px_0px_black]">
+            assembler02@fih.com
+        </div>
+    </div>
+
+    <img src="app-logo.png" alt="Logo" class="w-20 h-20 mb-6">
+
+    <div class="w-full max-w-md flex-grow flex flex-col items-center space-y-8 text-center">
+        
+        <div class="px-6">
+            <h1 class="text-2xl font-black italic uppercase leading-tight text-slate-900">
+                Troubleshooting Step 1:<br>Check Battery Connection
+            </h1>
+            <p class="mt-4 text-lg font-bold text-slate-700 leading-snug">
+                Check the battery’s Molex connector. Push firmly until it clicks to ensure a secure power connection.
+            </p>
+        </div>
+
+        <div class="w-full px-4">
+            <img src="battery-install-guide.png" alt="Molex Connection Guide" class="w-full h-auto rounded-[2.5rem] border-4 border-black shadow-xl pulse-soft">
+        </div>
+
+        <div class="px-8">
+            <h2 class="text-2xl font-black uppercase italic text-black">
+                Is your battery fully connected?
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 w-full px-2 pb-8">
+            
+            <a href="checking_connection.html" class="bg-[#84cc16] border-4 border-black rounded-[2.5rem] p-6 flex flex-col items-center justify-center min-h-[220px] shadow-[0px_8px_0px_#4d7c0f] bubbly-button">
+                <i data-lucide="check-circle" class="w-16 h-16 text-white mb-4"></i>
+                <span class="font-black text-lg uppercase tracking-tighter text-white leading-tight">
+                    The battery is<br>now connected.<br>Let's Retry
+                </span>
+            </a>
+
+            <a href="check_ap.html" class="bg-[#ef4444] border-4 border-black rounded-[2.5rem] p-6 flex flex-col items-center justify-center min-h-[220px] shadow-[0px_8px_0px_#991b1b] bubbly-button">
+                <i data-lucide="help-circle" class="w-16 h-16 text-white mb-4"></i>
+                <span class="font-black text-lg uppercase tracking-tighter text-white leading-tight">
+                    The battery was<br>fully connected.<br>Let's check<br>something else.
+                </span>
+            </a>
+
+        </div>
+    </div>
+
+    <div id="instructionsModal" class="hidden fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] border-4 border-black shadow-[10px_10px_0px_black] overflow-hidden flex flex-col">
+            <div class="p-6 border-b-4 border-black flex justify-between items-center bg-[#F3D37D]">
+                <h3 class="font-black text-2xl uppercase italic">Instructions</h3>
+                <button onclick="toggleModal('instructionsModal', false)" class="p-2 bg-white border-2 border-black rounded-full shadow-[2px_2px_0px_black]"><i data-lucide="x" class="w-8 h-8"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh]"><img src="assembly-guide.png" class="w-full h-auto rounded-xl"></div>
+            <div class="p-6">
+                <button onclick="toggleModal('instructionsModal', false)" class="w-full bg-black text-white font-black py-4 rounded-xl uppercase">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function toggleModal(id, show) {
+            const m = document.getElementById(id);
+            m.classList.toggle('hidden', !show);
+            m.classList.toggle('flex', show);
+        }
+    </script>
+</body>
+</html>
